@@ -11,6 +11,10 @@ import (
 
 var sqlDbStorageLockFactoryBeanFactory *storage_lock_factory.StorageLockFactoryBeanFactory[*sql.DB, *sql.DB] = storage_lock_factory.NewStorageLockFactoryBeanFactory[*sql.DB, *sql.DB]()
 
+// newMysqlStorage 指向 mysql_storage.NewMysqlStorage，包级变量以便单测注入构造失败，
+// 覆盖 GetOrInit initFunc 的错误分支。
+var newMysqlStorage = mysql_storage.NewMysqlStorage
+
 func NewMariadbLockBySqlDb(ctx context.Context, db *sql.DB, lockId string) (*storage_lock.StorageLock, error) {
 	factory, err := GetMariadbLockFactoryBySqlDb(ctx, db)
 	if err != nil {
@@ -31,7 +35,7 @@ func GetMariadbLockFactoryBySqlDb(ctx context.Context, db *sql.DB) (*storage_loc
 	return sqlDbStorageLockFactoryBeanFactory.GetOrInit(ctx, db, func(ctx context.Context) (*storage_lock_factory.StorageLockFactory[*sql.DB], error) {
 		connectionManager := mariadb_storage.NewMariadbConnectionManagerFromSqlDb(db)
 		options := mysql_storage.NewMySQLStorageOptions().SetConnectionManager(connectionManager)
-		storage, err := mysql_storage.NewMysqlStorage(ctx, options)
+		storage, err := newMysqlStorage(ctx, options)
 		if err != nil {
 			return nil, err
 		}
