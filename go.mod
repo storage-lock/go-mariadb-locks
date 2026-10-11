@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
-	github.com/storage-lock/go-mariadb-storage v0.0.0-20230923191040-024a0d947ca3
+	github.com/storage-lock/go-mariadb-storage v0.0.2
 	github.com/storage-lock/go-mysql-storage v0.0.3
 	github.com/storage-lock/go-storage-lock v0.0.6
 	github.com/storage-lock/go-storage-lock-factory v0.0.2
@@ -27,5 +27,3 @@ require (
 	github.com/storage-lock/go-utils v0.0.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/storage-lock/go-mariadb-storage => ../go-mariadb-storage
